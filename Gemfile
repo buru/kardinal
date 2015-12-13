@@ -55,6 +55,8 @@ group :test do
   gem 'rake'
 end
 
+gem 'rails_12factor', group: :production
+
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
