@@ -1,74 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>kardinal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <%= stylesheet_link_tag "application" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body <% if ((current_user && current_user.email == "demo@example.com") || !logged_in? ) %>class="has-active-modal"<% end %>>
+    <head>
+        <%= stylesheet_link_tag "application" %>
+        <%= javascript_include_tag "application" %>
+        <%= csrf_meta_tags %>
+        <meta charset="UTF-8">
+        <title>Change IT</title>
+    </head>
+    <body class="landing">
+        <div id="page-wrapper">
+            <!-- Header -->
+            <header id="header" class="alt">
+                <!--PUT LOGO HERE -->
+                <%= link_to root_url, title: 'Громадський сервіс петицій' do %><%= image_tag 'logo.png', width: '200px' %><% end %>
+                <div id="headerBar">
+                    <nav id="nav">
+                        <ul>
+                            <li><%= link_to 'Створити петицію', new_petition_url %></li>
+                            <li><a href="index.html">Рейтинги</a></li>
+                            <% if current_user %>
+                                <li>
+                                  <a href="#" class="icon fa-angle-down">
+                                    <%= link_to current_user do %>
+                                      <%= current_user.name %>  <b><%= current_user.rating %></b>
+                                    <% end %>
+                                  </a>
+                                    <ul>
+                                        <li><%= link_to 'Профіль', current_user %></li>
+                                        <li><%= link_to 'Вихід', session_url, method: :delete %></li>
+                                    </ul>
+                                </li>
+                            <% else %>
+                              <li><a href="<%= login_url %>" class="button">Увійти</a></li>
+                        <% end %>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
 
-  <header class="app group">
-    <a class="left" href="<%= root_url %>" title="kardinal home page">
-      <span class="logo">kardinal</span>
-      <span class="tag">activism</span>
-    </a>
+            <%= yield %>
 
-    <ul class="main-links">
-      <li><%= link_to "Start a petition", new_petition_url, title: "Start a petition" %></li>
-      <li><%= link_to "Browse petitions", petitions_url, title: "View all petitions" %></li>
-      <li><a href="#" class="show-modal" title="Click for help tip">?</a></li>
-    </ul>
-
-    <nav class="group right">
-      <ul class="user">
-        <% if logged_in? %>
-        <details>
-          <summary>
-            <a href="<%= me_url %>" title="Go to your page">
-              <img src="<%= current_user.image.url(:thumbnail) %>" alt="Your profile image thumbnail">
-              <%= current_user.name %>
-            </a>
-          </summary>
-          <ul class="group">
-            <li><%= link_to "My petitions", me_url, title: "View your petitions" %></li>
-            <li><%= link_to "Profile", user_url(current_user), title: "View your profile page" %></li>
-            <li><%= link_to "Account", me_edit_url, title: "Edit your profile" %></li>
-            <li><%= button_to "Log out", session_url, method: :delete, class: "menu-action", title: "Log out" %></li>
-          </ul>
-        </details>
-        <% else %>
-        <li><%= link_to "Log in", login_url, class: "mild-action", title: "Log in" %></li>
-        <% end %>
-      </ul>
-    </nav>
-  </header>
-
-  <% unless flash.keys.empty? %>
-  <ul id="flash">
-  <% flash.try(:each) do |name, messages| %>
-    <% messages.try(:each) do |message| %>
-      <li class="<%= name %>"><%= message %></li>
-    <% end %>
-  <% end %>
-  </ul>
-  <% end %>
-
-  <%= yield %>
-
-  <footer>
-    <nav class="group">
-      <small class="left">&copy; 2014
-        <a class="copy" href="http://www.timothylevi.com" title="Go to the developer's websites">Timothy Levi Campbell</a></small>
-      <ul class="right">
-        <!-- <li>&middot; <%= link_to "About", "#", title: "Read about this website" %></li> -->
-        <li>&middot; <%= link_to "Browse Petitions", petitions_url, title: "View all petitions" %></li>
-        <li>&middot; <%= link_to "Victories", victories_url, title: "View all victories" %></li>
-        <!-- <li>&middot; <%= link_to "Credits", "#", title: "Read this page's credits" %></li> -->
-      </ul>
-    </nav>
-  </footer>
-
-</body>
+            <!-- Footer -->
+            <footer id="footer">
+                <ul class="icons">
+                    <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+                    <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+                    <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+                    <li><a href="#" class="icon fa-github"><span class="label">Github</span></a></li>
+                    <li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+                    <li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
+                </ul>
+                <ul class="copyright">
+                    <li>&copy; Change IT. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                </ul>
+            </footer>
+        </div>
+    </body>
 </html>

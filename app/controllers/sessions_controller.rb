@@ -20,18 +20,19 @@ class SessionsController < ApplicationController
       @user = User.find_by_email(params[:user][:email])
 
       if @user
+        logger.info "Checking user credentials, #{@user.inspect}"
         if check_user_credentials(@user)
+          logger.info "User logged in #{@user.inspect}"
           flash[:notices] = ["Welcome back, #{@user.first_name}!"]
+          sign_in @user, bypass: true
           redirect_to root_url
         else
-          flash.now[:errors] = ["Your username or password is incorrect."]
+          flash[:errors] = ["Your username or password is incorrect."]
           render :new
         end
       else
         @user = User.new(user_params)
-        contact = params[:contact_details]
-
-        if create_user(@user, contact).valid?
+        if @user.save
           login(@user)
           flash[:notices] = ["Welcome, #{@user.first_name}!"]
 
@@ -40,7 +41,9 @@ class SessionsController < ApplicationController
         else
           flash[:errors] = @user.errors.full_messages
 
-          redirect_to new_user_url
+          logger.info "Redirecting. Errors: #{@user.errors.full_messages}"
+
+          render :new
         end
       end
     end
