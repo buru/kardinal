@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151212181639) do
+ActiveRecord::Schema.define(version: 20151212222554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,12 @@ ActiveRecord::Schema.define(version: 20151212181639) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "causes", force: :cascade do |t|
     t.string   "name",        limit: 255, null: false
     t.datetime "created_at",              null: false
@@ -61,8 +67,9 @@ ActiveRecord::Schema.define(version: 20151212181639) do
     t.integer  "commentable_id"
     t.string   "commentable_type", limit: 255
     t.string   "body",             limit: 255
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.integer  "rating",                       default: 0, null: false
   end
 
   create_table "contact_details", force: :cascade do |t|
@@ -142,6 +149,8 @@ ActiveRecord::Schema.define(version: 20151212181639) do
     t.string   "image_content_type", limit: 255
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.integer  "organization_id"
+    t.integer  "category_id"
   end
 
   add_index "petitions", ["creator_id", "title"], name: "index_petitions_on_creator_id_and_title", using: :btree
@@ -182,7 +191,7 @@ ActiveRecord::Schema.define(version: 20151212181639) do
   create_table "users", force: :cascade do |t|
     t.string   "email",              limit: 255,               null: false
     t.string   "pw_digest",          limit: 255,               null: false
-    t.string   "name",               limit: 255,               null: false
+    t.string   "name",               limit: 250, default: "",  null: false
     t.string   "pwreset_token",      limit: 255,               null: false
     t.string   "session_token",      limit: 255,               null: false
     t.datetime "created_at",                                   null: false
